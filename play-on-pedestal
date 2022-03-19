@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sound=$1
+
 function increase_volume() {
   pactl list short sink-inputs | while read PID dump
   do
@@ -20,11 +22,26 @@ function decrease_volume() {
       for run in {1..6}; do /usr/bin/pactl -- set-sink-input-volume $PID -5%; done
     fi
   done
-}
+} 
 
-decrease_volume
-sleep 0.01
-/usr/bin/paplay --volume 65536 $1
-sleep 0.01
-increase_volume
+
+# This mechanism before the "Essential Actions" is needed so that two instances of this script will never be ran simultaneously
+( 
+    flock -w 1 200 
+    if [ $? -ne 0 ] ; then 
+        # Script is already running. Do not allow running a second instance 
+        echo "Lock already established. Aborting." 
+        exit 1 
+    else
+
+		#Essential Actions
+		decrease_volume
+   	    sleep 0.01
+		/usr/bin/paplay --volume 65536 $sound
+		sleep 0.01
+		increase_volume            
+ 
+    fi
+	#Path to appropriate lockfile. I suggest changing this to /run/user/play-on-pedestal.lock
+) 200> /tmp/play-on-pedestal.lock
 
