@@ -42,6 +42,6 @@ function decrease_volume() {
 		increase_volume            
  
     fi
-	#Path to appropriate lockfile. I suggest changing this to /run/user/play-on-pedestal.lock
-) 200> /tmp/play-on-pedestal.lock
+	#Path to lockfile
+) 200> "/var/tmp/`basename $0`.lock"
 
