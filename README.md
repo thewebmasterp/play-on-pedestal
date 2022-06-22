@@ -8,3 +8,6 @@ play-on-pedestal is a little bash script that plays a sound file while decreasin
 
 ## Purpose
  I personally use it with dunst, so that when a notification pops up I'll clearly hear it and it won't get lost and mixed up with my currently playing music.
+
+## Requirements
+ It works with PulseAudio
